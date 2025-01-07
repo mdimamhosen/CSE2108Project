@@ -217,3 +217,95 @@ CREATE TABLE classroom_resources (
     resource_quantity INT NOT NULL,
     FOREIGN KEY (classroom_id) REFERENCES classrooms(classroom_id)
 );
+
+CREATE TABLE quizzes (
+    quiz_id INT AUTO_INCREMENT PRIMARY KEY,
+    quiz_title VARCHAR(100) NOT NULL,
+    course_id INT NOT NULL,
+    quiz_date DATE NOT NULL,
+    total_marks INT NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+CREATE TABLE quiz_results (
+    result_id INT AUTO_INCREMENT PRIMARY KEY,
+    quiz_id INT NOT NULL,
+    student_id INT NOT NULL,
+    marks_obtained INT NOT NULL,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(quiz_id),
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+
+CREATE TABLE assignments (
+    assignment_id INT AUTO_INCREMENT PRIMARY KEY,
+    assignment_title VARCHAR(100) NOT NULL,
+    course_id INT NOT NULL,
+    assignment_date DATE NOT NULL,
+    due_date DATE NOT NULL,
+    total_marks INT NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+CREATE TABLE assignment_results (
+    result_id INT AUTO_INCREMENT PRIMARY KEY,
+    assignment_id INT NOT NULL,
+    student_id INT NOT NULL,
+    marks_obtained INT NOT NULL,
+    FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id),
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+
+CREATE TABLE clubs (
+    club_id INT AUTO_INCREMENT PRIMARY KEY,
+    club_name VARCHAR(100) NOT NULL UNIQUE,
+    club_description TEXT,
+    creation_date DATE NOT NULL,
+    head_of_club INT,
+    FOREIGN KEY (head_of_club) REFERENCES faculty(faculty_id)
+);
+
+CREATE TABLE club_memberships (
+    membership_id INT AUTO_INCREMENT PRIMARY KEY,
+    club_id INT NOT NULL,
+    member_id INT NOT NULL,
+    member_type ENUM('Student', 'Faculty') NOT NULL,
+    join_date DATE NOT NULL,
+    FOREIGN KEY (club_id) REFERENCES clubs(club_id),
+    FOREIGN KEY (member_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE transportation_management (
+    transport_id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_type ENUM('Bus', 'Car', 'Van') NOT NULL,
+    route_name VARCHAR(100) NOT NULL,
+    capacity INT NOT NULL,
+    driver_name VARCHAR(100),
+    contact_number VARCHAR(15)
+);
+
+CREATE TABLE transport_allocations (
+    allocation_id INT AUTO_INCREMENT PRIMARY KEY,
+    transport_id INT NOT NULL,
+    user_id INT NOT NULL,
+    allocation_date DATE NOT NULL,
+    FOREIGN KEY (transport_id) REFERENCES transportation_management(transport_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE Alumni (
+    alumni_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    graduation_year YEAR,
+    department_id INT NOT NULL,
+    current_job VARCHAR(100),
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+
+CREATE TABLE classrooms (
+    classroom_id INT AUTO_INCREMENT PRIMARY KEY,
+    classroom_name VARCHAR(50) NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    capacity INT NOT NULL
+);
