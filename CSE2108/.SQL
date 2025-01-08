@@ -141,3 +141,20 @@ VALUES ('admin', 'adminpassword', 'admin');
 
 ALTER TABLE Hostels
 ADD COLUMN capacity INT;
+ALTER TABLE Hostels
+ADD COLUMN address VARCHAR(255);
+
+
+CREATE TABLE courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(50) NOT NULL UNIQUE
+);
+
+ALTER TABLE courses
+ADD COLUMN department_id INT NOT NULL;
+
+ALTER TABLE courses
+ADD CONSTRAINT fk_department
+FOREIGN KEY (department_id) REFERENCES departments(id)
+ON DELETE CASCADE;
