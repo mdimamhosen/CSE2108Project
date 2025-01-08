@@ -139,3 +139,5 @@ CREATE TABLE Admin (
 INSERT INTO Admin (username, password, role)
 VALUES ('admin', 'adminpassword', 'admin');
 
+ALTER TABLE Hostels
+ADD COLUMN capacity INT;
