@@ -1,22 +1,25 @@
+-- Create the UniversityDB database
 CREATE DATABASE UniversityDB;
 
 USE UniversityDB;
 
--- Create tables for departments, teachers, courses, students, enrollments, etc.
-
+-- Create the Departments table
 CREATE TABLE Departments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
 
+-- Create the Teachers table with a role column
 CREATE TABLE Teachers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     department_id INT NOT NULL,
     password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'teacher',  -- Role column added here
     FOREIGN KEY (department_id) REFERENCES Departments(id)
 );
 
+-- Create the Students table with a role column
 CREATE TABLE Students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -24,18 +27,13 @@ CREATE TABLE Students (
     department_id INT NOT NULL,
     password VARCHAR(255) NOT NULL,
     hostel_id INT,
+    role VARCHAR(50) NOT NULL DEFAULT 'student',  -- Role column added here
     FOREIGN KEY (department_id) REFERENCES Departments(id)
 );
 
-CREATE TABLE Courses (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    department_id INT NOT NULL,
-    teacher_id INT NOT NULL,
-    FOREIGN KEY (department_id) REFERENCES Departments(id),
-    FOREIGN KEY (teacher_id) REFERENCES Teachers(id)
-);
+-- Create other tables like Courses, Enrollments, Exams, etc., as before
 
+-- Create the Enrollments table
 CREATE TABLE Enrollments (
     student_id INT NOT NULL,
     course_id INT NOT NULL,
@@ -44,6 +42,7 @@ CREATE TABLE Enrollments (
     FOREIGN KEY (course_id) REFERENCES Courses(id)
 );
 
+-- Create the Exams table
 CREATE TABLE Exams (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -53,6 +52,7 @@ CREATE TABLE Exams (
     FOREIGN KEY (teacher_id) REFERENCES Teachers(id)
 );
 
+-- Create the ExamResults table
 CREATE TABLE ExamResults (
     exam_id INT NOT NULL,
     student_id INT NOT NULL,
@@ -62,6 +62,7 @@ CREATE TABLE ExamResults (
     FOREIGN KEY (student_id) REFERENCES Students(id)
 );
 
+-- Create the Quizzes table
 CREATE TABLE Quizzes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -71,6 +72,7 @@ CREATE TABLE Quizzes (
     FOREIGN KEY (teacher_id) REFERENCES Teachers(id)
 );
 
+-- Create the QuizResults table
 CREATE TABLE QuizResults (
     quiz_id INT NOT NULL,
     student_id INT NOT NULL,
@@ -80,11 +82,13 @@ CREATE TABLE QuizResults (
     FOREIGN KEY (student_id) REFERENCES Students(id)
 );
 
+-- Create the Libraries table
 CREATE TABLE Libraries (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
 
+-- Create the Books table
 CREATE TABLE Books (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -92,6 +96,7 @@ CREATE TABLE Books (
     FOREIGN KEY (library_id) REFERENCES Libraries(id)
 );
 
+-- Create the BorrowedBooks table
 CREATE TABLE BorrowedBooks (
     student_id INT NOT NULL,
     book_id INT NOT NULL,
@@ -102,16 +107,19 @@ CREATE TABLE BorrowedBooks (
     FOREIGN KEY (book_id) REFERENCES Books(id)
 );
 
+-- Create the Hostels table
 CREATE TABLE Hostels (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
 
+-- Create the Club table
 CREATE TABLE Club (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
 
+-- Create the ClubMemberships table
 CREATE TABLE ClubMemberships (
     student_id INT NOT NULL,
     club_id INT NOT NULL,
@@ -120,7 +128,14 @@ CREATE TABLE ClubMemberships (
     FOREIGN KEY (club_id) REFERENCES Club(id)
 );
 
--- Create Admin manually in the database
+---- Create the Admin table to store admin-specific data
+CREATE TABLE Admin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'admin' -- Ensures the role is always admin
+);
+-- Insert admin user into the Admin table
+INSERT INTO Admin (username, password, role)
+VALUES ('admin', 'adminpassword', 'admin');
 
-INSERT INTO Departments (name) VALUES ('Computer Science');
-INSERT INTO Teachers (name, department_id, password) VALUES ('admin', 1, 'adminpassword');
